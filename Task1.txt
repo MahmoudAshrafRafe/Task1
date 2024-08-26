@@ -1,0 +1,32 @@
+                                     بسم الله الرحمن الرحيم 
+                                       _:Task1:_
+
+import pandas as pd
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, Normalizer
+from kaggle.api.kaggle_api_extended import KaggleApi
+
+# Load Kaggle API credentials
+api = KaggleApi()
+api.authenticate()
+
+# Load raw data from Kaggle
+competition_name = "your-competition-name"
+dataset_name = "your-dataset-name"
+data = api.competition_download_file(competition_name, dataset_name)
+df = pd.read_csv(data)
+
+# Imputation
+imputer = SimpleImputer(strategy='mean')
+df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
+
+# Standardization
+scaler = StandardScaler()
+df_standardized = pd.DataFrame(scaler.fit_transform(df_imputed), columns=df_imputed.columns)
+
+# Normalization
+normalizer = Normalizer()
+df_normalized = pd.DataFrame(normalizer.fit_transform(df_standardized), columns=df_standardized.columns)
+
+# Print the preprocessed data
+print(df_normalized.head())
